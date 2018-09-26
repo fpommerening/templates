@@ -22,15 +22,9 @@ FROM microsoft/dotnet:2.1-runtime
 # Create a non-root user
 RUN addgroup --system app \
     && adduser --system --ingroup app app \
-    && apt-get update -qy \
-    && apt-get install -qy \
-       curl ca-certificates --no-install-recommends \ 
     && echo "Pulling watchdog binary from Github." \
     && curl -sSL https://github.com/openfaas/faas/releases/download/0.8.10/fwatchdog > /usr/bin/fwatchdog \
-    && chmod +x /usr/bin/fwatchdog \
-    && apt-get -qy remove curl \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+    && chmod +x /usr/bin/fwatchdog
 
 WORKDIR /home/app/
 COPY --from=builder /home/app/src/published .
